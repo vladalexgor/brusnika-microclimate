@@ -38,8 +38,8 @@
           <span class="hero__dot"></span>
           Расчёт IES VE · Брусника · Микроклимат
         </div>
-        <h1 class="hero__title">Комфорт <span>vs</span> База</h1>
-        <p class="hero__sub">Годовой анализ ОПЕКС и микроклимата · Тариф 5,37 / 2,70 ₽/кВт·ч · Теплоноситель 1,91 ₽/кВт·ч</p>
+        <h1 class="hero__title">Качество среды <span>и стоимость</span> владения</h1>
+        <p class="hero__sub">Сравнение вариантов инженерии · Тариф 5,37 / 2,70 ₽/кВт·ч · Теплоноситель 1,91 ₽/кВт·ч · CAPEX со скидкой 15%</p>
       </div>
       <div class="hero__right">
         <div class="hero__apt-label" id="hero-apt-label">Квартира 1-комн</div>
@@ -49,10 +49,55 @@
   </div>
 
   <!-- ── KPI CARDS ──────────────────────────────────────────────── -->
-  <div class="kpi-grid">
-    <div class="kpi kpi--comfort" id="kpi-comfort"></div>
-    <div class="kpi kpi--base"    id="kpi-base"></div>
-    <div class="kpi kpi--diff"    id="kpi-diff"></div>
+  <div class="kpi-grid" id="kpi-root"></div>
+
+  <!-- ── MICROCLIMATE (первым — показываем ценность) ────────────── -->
+  <div class="panel">
+    <div class="panel__head">
+      <div>
+        <div class="panel__title">Микроклимат · <span id="mic-subtitle">CO₂ · максимум по месяцам</span></div>
+        <div class="panel__note">Почасовые данные IES VE · 8 760 ч/год</div>
+      </div>
+      <span style="font-size:0.72rem;color:var(--muted)" id="mic-norm">ГОСТ 30494-2011</span>
+    </div>
+
+    <div class="mic-controls">
+      <!-- Metric buttons -->
+      <div class="metric-group">
+        <button class="metric-btn metric-btn--active" data-metric="co2">CO₂</button>
+        <button class="metric-btn" data-metric="temp">Температура</button>
+        <button class="metric-btn" data-metric="rh">Влажность</button>
+        <button class="metric-btn" data-metric="vent">Вентиляция</button>
+      </div>
+      <!-- Room tabs -->
+      <div class="room-group" id="room-tabs"></div>
+    </div>
+
+    <!-- CO2 class legend -->
+    <div class="co2-legend" id="co2-legend">
+      <span class="co2-pill co2-pill--1">Кл. 1 &lt;800</span>
+      <span class="co2-pill co2-pill--2">Кл. 2 800–1000</span>
+      <span class="co2-pill co2-pill--3">Кл. 3 1000–1400</span>
+      <span class="co2-pill co2-pill--4">Кл. 4 ≥1400 ppm</span>
+    </div>
+
+    <!-- Chart + stats side by side -->
+    <div class="grid-mic">
+      <div>
+        <div class="mic-legend-row">
+          <span class="mic-legend-item">
+            <span id="leg-comfort" class="mic-legend-line"></span>Комфорт
+          </span>
+          <span class="mic-legend-item">
+            <span id="leg-base" class="mic-legend-line"></span>База
+          </span>
+        </div>
+        <div class="chart-wrap" style="height:240px">
+          <canvas id="chart-mic"></canvas>
+        </div>
+      </div>
+      <div class="stats-block" id="mic-stats"></div>
+    </div>
   </div>
 
   <!-- ── OPEX ───────────────────────────────────────────────────── -->
@@ -65,20 +110,17 @@
     </div>
 
     <div class="grid-opex">
-      <!-- Monthly stacked -->
       <div>
         <div class="eyebrow">Сезонность затрат по категориям</div>
         <div class="legend-row" id="opex-legend"></div>
-        <div class="chart-wrap" style="height:210px">
+        <div class="chart-wrap" style="height:220px">
           <canvas id="chart-opex-monthly"></canvas>
         </div>
       </div>
-
-      <!-- Breakdown -->
       <div>
-        <div class="eyebrow">Структура затрат · годовые итоги</div>
+        <div class="eyebrow">Структура годовых затрат</div>
         <div class="legend-row" id="breakdown-legend"></div>
-        <div class="chart-wrap" style="height:130px">
+        <div class="chart-wrap" style="height:110px">
           <canvas id="chart-breakdown"></canvas>
         </div>
         <div class="annual-grid" id="opex-annual"></div>
@@ -86,61 +128,35 @@
     </div>
   </div>
 
-  <!-- ── MICROCLIMATE ────────────────────────────────────────────── -->
+  <!-- ── CAPEX ──────────────────────────────────────────────────── -->
   <div class="panel">
     <div class="panel__head">
       <div>
-        <div class="panel__title">Микроклимат · <span id="mic-subtitle">CO₂ · максимум по месяцам</span></div>
+        <div class="panel__title">CAPEX оборудования · единовременные затраты</div>
+        <div class="panel__note">Цены поставщиков со скидкой 15% · без монтажа</div>
       </div>
-      <span style="font-size:0.72rem;color:var(--muted)" id="mic-norm">ГОСТ 30494-2011</span>
     </div>
 
-    <!-- Metric buttons -->
-    <div class="metric-group">
-      <button class="metric-btn metric-btn--active" data-metric="co2">CO₂</button>
-      <button class="metric-btn" data-metric="temp">Температура</button>
-      <button class="metric-btn" data-metric="rh">Влажность</button>
-      <button class="metric-btn" data-metric="vent">Вентиляция</button>
-    </div>
-
-    <!-- CO2 class legend -->
-    <div class="co2-legend" id="co2-legend">
-      <span class="co2-pill co2-pill--1">Кл. 1 &lt;800</span>
-      <span class="co2-pill co2-pill--2">Кл. 2 800–1000</span>
-      <span class="co2-pill co2-pill--3">Кл. 3 1000–1400</span>
-      <span class="co2-pill co2-pill--4">Кл. 4 ≥1400 ppm</span>
-    </div>
-
-    <!-- Room tabs -->
-    <div class="room-group" id="room-tabs"></div>
-
-    <!-- Chart + stats -->
-    <div class="grid-mic">
+    <div class="grid-capex">
+      <!-- CAPEX breakdown chart -->
       <div>
-        <!-- Line legend -->
-        <div style="display:flex;gap:1.25rem;margin-bottom:0.65rem;font-size:0.75rem;color:var(--muted);align-items:center">
-          <span style="display:flex;align-items:center;gap:5px">
-            <span id="leg-comfort" style="width:22px;height:3px;border-radius:2px;display:inline-block"></span>
-            Комфорт
-          </span>
-          <span style="display:flex;align-items:center;gap:5px">
-            <span id="leg-base" style="width:22px;height:3px;border-radius:2px;display:inline-block"></span>
-            База
-          </span>
+        <div class="eyebrow">Состав затрат</div>
+        <div class="legend-row" id="capex-legend"></div>
+        <div class="chart-wrap" style="height:100px">
+          <canvas id="chart-capex"></canvas>
         </div>
-        <div class="chart-wrap" style="height:230px">
-          <canvas id="chart-mic"></canvas>
-        </div>
+        <!-- TCO table -->
+        <div class="tco-block" id="tco-block"></div>
       </div>
-      <div class="stats-block" id="mic-stats"></div>
+      <!-- Insight card -->
+      <div class="insight-card" id="capex-insight"></div>
     </div>
   </div>
 
 </div><!-- /page -->
 
-<!-- ── FOOTER ─────────────────────────────────────────────────── -->
 <footer class="footer">
-  Брусника · Расчёт IES VE 2026 · Данные: почасовые результаты моделирования<br>
+  Брусника · Расчёт IES VE 2026 · Данные: почасовые результаты моделирования (8 760 ч)<br>
   Тарифы: электроэнергия 5,37 / 2,70 ₽/кВт·ч (день/ночь) · теплоноситель 1,91 ₽/кВт·ч<br>
   Норматив микроклимата: ГОСТ 30494-2011 · Вентиляция: СП 54.13330.2022
 </footer>
