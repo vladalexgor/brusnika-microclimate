@@ -420,11 +420,31 @@ body {
 }
 
 /* ── FOOTER ──────────────────────────────────────────────────── */
-.footer {
-  text-align: center; padding: 1.75rem 0 1rem;
-  font-size: 0.68rem; color: var(--muted);
-  opacity: 0.5; line-height: 1.8;
+.site-footer {
+  background: var(--surface);
+  border-top: 1px solid rgba(238,240,245,0.07);
+  padding: 1.25rem 2rem;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 1rem; flex-wrap: wrap;
 }
+.footer__meta {
+  font-size: 0.68rem; color: var(--muted); opacity: 0.55; line-height: 1.7;
+}
+.footer__brand {
+  display: flex; flex-direction: column; align-items: flex-end; gap: 0.2rem;
+  flex-shrink: 0;
+}
+.footer__logo {
+  font-size: 0.9rem; color: var(--muted);
+}
+.footer__logo b { color: var(--text); font-weight: 600; }
+.footer__contact {
+  font-size: 0.85rem; color: var(--muted);
+}
+.footer__tg {
+  color: var(--comfort); text-decoration: none;
+}
+.footer__tg:hover { text-decoration: underline; }
 
 /* ── RESPONSIVE ──────────────────────────────────────────────── */
 @media (max-width: 1000px) {
