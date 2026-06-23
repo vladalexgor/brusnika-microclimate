@@ -141,14 +141,14 @@
     }};
   }
 
-  function makeOutlierPlugin(getBData) {
+  function makeOutlierPlugin(getBData, clip = CO2_CLIP) {
     return { id: 'outliers', afterDatasetsDraw(chart) {
       const orig = getBData(); if (!orig) return;
       const { ctx } = chart;
       const meta = chart.getDatasetMeta(1);
       ctx.save();
       orig.forEach((v,i) => {
-        if (v <= CO2_CLIP) return;
+        if (v <= clip) return;
         const pt = meta.data[i]; if (!pt) return;
         ctx.fillStyle = C.base;
         ctx.beginPath(); ctx.moveTo(pt.x,pt.y+2); ctx.lineTo(pt.x-6,pt.y+12); ctx.lineTo(pt.x+6,pt.y+12); ctx.closePath(); ctx.fill();
@@ -170,19 +170,22 @@
     let cData, bData, yMin, yMax, stepSize, sfx, bands, lines, plugins, ttC, ttB;
 
     if (metric === 'co2') {
-      cData = dc.co2_max.map(v => Math.min(v, CO2_CLIP));
-      bData = db.co2_max.map(v => Math.min(v, CO2_CLIP));
-      yMin=400; yMax=CO2_CLIP; stepSize=400; sfx=' ppm';
+      const rawMax  = Math.max(...dc.co2_max, ...db.co2_max);
+      const co2Step = rawMax > 3200 ? 800 : 400;
+      const co2Clip = Math.max(1600, Math.ceil(rawMax / co2Step) * co2Step);
+      cData = dc.co2_max.map(v => Math.min(v, co2Clip));
+      bData = db.co2_max.map(v => Math.min(v, co2Clip));
+      yMin=400; yMax=co2Clip; stepSize=co2Step; sfx=' ppm';
       bands = [
         {y1:400, y2:800,      f:'rgba(91,160,80,0.10)'},
         {y1:800, y2:1000,     f:'rgba(192,152,72,0.11)'},
         {y1:1000,y2:1400,     f:'rgba(192,96,80,0.09)'},
-        {y1:1400,y2:CO2_CLIP, f:'rgba(192,96,80,0.06)'},
+        {y1:1400,y2:co2Clip,  f:'rgba(192,96,80,0.06)'},
       ];
       lines   = [{val:800},{val:1000},{val:1400}];
       ttC     = (_,i) => ` Комфорт: ${dc.co2_max[i].toLocaleString('ru-RU')} ppm`;
       ttB     = (_,i) => ` База: ${db.co2_max[i].toLocaleString('ru-RU')} ppm`;
-      plugins = [makeBandPlugin(bands,lines), makeOutlierPlugin(()=>db.co2_max)];
+      plugins = [makeBandPlugin(bands,lines), makeOutlierPlugin(()=>db.co2_max, co2Clip)];
 
     } else if (metric === 'temp') {
       cData = dc.temp_mean; bData = db.temp_mean;
