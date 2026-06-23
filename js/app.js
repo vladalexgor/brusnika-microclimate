@@ -250,7 +250,8 @@
 
   /* ── Mic stats panel ─────────────────────────────────────────── */
   function statRow(label,cVal,bVal,sfx,lowIsGood) {
-    const cBetter = lowIsGood ? cVal<=bVal : cVal>=bVal;
+    const bNoData = bVal === null || bVal === undefined;
+    const cBetter = bNoData ? true : (lowIsGood ? cVal<=bVal : cVal>=bVal);
     return `<div class="stat-item">
       <div class="stat-item__label">${label}</div>
       <div class="stat-item__grid">
@@ -258,9 +259,9 @@
           <div class="stat-cell__name">Комфорт</div>
           <div class="stat-cell__val">${fr(cVal)}${sfx}</div>
         </div>
-        <div class="stat-cell ${!cBetter?'stat-cell--success':'stat-cell--danger'}">
+        <div class="stat-cell stat-cell--neutral">
           <div class="stat-cell__name">База</div>
-          <div class="stat-cell__val">${fr(bVal)}${sfx}</div>
+          <div class="stat-cell__val">${bNoData ? 'н/д' : fr(bVal)+sfx}</div>
         </div>
       </div></div>`;
   }
@@ -309,10 +310,11 @@
           statRowN('Сред. подача',fr(dc.vent_ann.mean),fr(db.vent_ann.mean),' м³/ч') +
           `<div class="stat-note">Кухня-гостиная — зона вытяжки.<br>Прямая мех. подача отсутствует в обоих вариантах.</div>`;
       } else {
+        const baseNoData = db.vent_ann.mean === 0;
         el.innerHTML =
-          statRow('Сред. подача',Math.round(dc.vent_ann.mean),Math.round(db.vent_ann.mean),' м³/ч',false) +
-          statRow(`Ч/год < ${norm} м³/ч`,dc.vent_h_below,db.vent_h_below,' ч',true) +
-          `<div class="stat-note">Синяя линия — норматив ${norm} м³/ч<br>(вариант Комфорт)</div>`;
+          statRow('Сред. подача',Math.round(dc.vent_ann.mean), baseNoData ? null : Math.round(db.vent_ann.mean),' м³/ч',false) +
+          statRow(`Ч/год < ${norm} м³/ч`,dc.vent_h_below, baseNoData ? null : db.vent_h_below,' ч',true) +
+          `<div class="stat-note">Синяя линия — норматив ${norm} м³/ч<br>(вариант Комфорт)${baseNoData ? '<br><span style="color:var(--warning);opacity:0.85">База — КИВ (пассивный приток), поток не моделируется в Data Zoom</span>' : ''}</div>`;
       }
     }
   }
