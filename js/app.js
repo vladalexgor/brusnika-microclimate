@@ -308,7 +308,7 @@
       if (isExhaust) {
         el.innerHTML =
           statRowN('Сред. подача',fr(dc.vent_ann.mean),fr(db.vent_ann.mean),' м³/ч') +
-          `<div class="stat-note">Кухня-гостиная — зона вытяжки.<br>Прямая мех. подача отсутствует в обоих вариантах.</div>`;
+          `<div class="stat-note">Кухня-гостиная — зона вытяжки<br>Прямая мех. подача отсутствует в обоих вариантах</div>`;
       } else {
         el.innerHTML =
           statRow('Сред. подача',Math.round(dc.vent_ann.mean),Math.round(db.vent_ann.mean),' м³/ч',false) +
@@ -510,9 +510,9 @@
         <div class="insight-card__tag">Стоимость качества · 1С</div>
         <div class="insight-card__title">Комфорт дороже и при покупке, и в эксплуатации — но даёт воздух</div>
         <div class="insight-card__body">
-          <strong>Δ CAPEX:</strong> +${fr(dca)} ₽ — бризеры с подогревом вместо клапанов КИВ.<br>
+          <strong>Δ CAPEX:</strong> +${fr(dca)} ₽ — бризеры с подогревом вместо клапанов КИВ<br>
           <strong>Δ OPEX:</strong> +${fr(dOpex)} ₽/год (+${fr(moCost)} ₽/мес) — работа
-          калорифера и приточного вентилятора.<br><br>
+          калорифера и приточного вентилятора<br><br>
           В ответ: CO₂ в спальне &lt;800 ppm круглый год vs. превышений нормы 1400 ppm
           в 8–9% часов при Базовом варианте.
         </div>
@@ -525,12 +525,12 @@
         <div class="insight-card__tag">Стоимость качества · 2С</div>
         <div class="insight-card__title">Комфорт дороже — осознанная доплата за микроклимат</div>
         <div class="insight-card__body">
-          <strong>Δ CAPEX:</strong> +${fr(dca)} ₽ — ХВВП с канальными фанкойлами вместо КИВ.<br>
-          <strong>Δ OPEX:</strong> +${fr(dOpex)} ₽/год (+${fr(moCost)} ₽/мес).<br><br>
-          Это менее <strong>1% от стоимости квартиры</strong> в CAPEX.
-          Ежемесячная разница сопоставима со стоимостью подписки.<br><br>
-          В ответ: детская без превышения 1000 ppm CO₂ vs &gt;1400 ppm в Базе.
-          Разница критическая для здоровья ребёнка.
+          <strong>Δ CAPEX:</strong> +${fr(dca)} ₽ — ХВВП с канальными фанкойлами вместо КИВ<br>
+          <strong>Δ OPEX:</strong> +${fr(dOpex)} ₽/год (+${fr(moCost)} ₽/мес)<br><br>
+          Это менее <strong>1% от стоимости квартиры</strong> в CAPEX
+          Ежемесячная разница сопоставима со стоимостью подписки<br><br>
+          В ответ: детская без превышения 1000 ppm CO₂ vs &gt;1400 ppm в Базе
+          Разница критическая для здоровья ребёнка
         </div>
         <div class="insight-card__highlight">
           TCO за 5 лет: +${fr(d5)} ₽ · за 10 лет: +${fr(d10)} ₽
