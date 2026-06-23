@@ -240,7 +240,7 @@ const DATA = {
           "vent_ann": {
             "mean": 40.1
           },
-          "vent_h_below": 0
+          "vent_h_below": 8760
         },
         "Living_Room": {
           "co2_max": [
@@ -520,7 +520,7 @@ const DATA = {
           "vent_ann": {
             "mean": 36.7
           },
-          "vent_h_below": 0
+          "vent_h_below": 8737
         },
         "Bedroom": {
           "co2_max": [
@@ -598,7 +598,7 @@ const DATA = {
           "vent_ann": {
             "mean": 41.6
           },
-          "vent_h_below": 0
+          "vent_h_below": 8385
         },
         "Living_Room": {
           "co2_max": [
@@ -676,7 +676,7 @@ const DATA = {
           "vent_ann": {
             "mean": 6.1
           },
-          "vent_h_below": 0
+          "vent_h_below": 8760
         }
       },
       "comfort": {
