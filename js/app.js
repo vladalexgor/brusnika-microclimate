@@ -1,4 +1,4 @@
-/* Брусника · Микроклимат и ОПЕКС · app.js */
+/* Брусника · Микроклимат и OPEX · app.js */
 (function () {
   'use strict';
 
@@ -73,7 +73,7 @@
     const ob  = d.totals.base;
     const cc  = d.capex.comfort.total;
     const cb  = d.capex.base.total;
-    const dco = oc - ob;         // ежегодная разница ОПЕКС
+    const dco = oc - ob;         // ежегодная разница OPEX
     const dca = cc - cb;         // разница CAPEX (отрицательная у 1С = Комфорт дешевле!)
     const moCost = Math.round(dco / 12); // стоимость комфорта в месяц
     const t5c = d.tco.y5.comfort;
@@ -105,12 +105,12 @@
       <div class="kpi kpi--cost">
         <div class="kpi__label">Стоимость комфорта</div>
         <div class="kpi__value">${fr(moCost)}<small>₽/мес</small></div>
-        <div class="kpi__sub">Разница ОПЕКС · ${fr(Math.round(dco/365))} ₽/день</div>
+        <div class="kpi__sub">Разница OPEX · ${fr(Math.round(dco/365))} ₽/день</div>
         <div class="kpi__delta kpi__delta--warn">+${fr(dco)} ₽/год</div>
       </div>
-      <!-- ОПЕКС Комфорт -->
+      <!-- OPEX Комфорт -->
       <div class="kpi kpi--comfort">
-        <div class="kpi__label">ОПЕКС · Комфорт</div>
+        <div class="kpi__label">OPEX · Комфорт</div>
         <div class="kpi__value">${fr(oc)}<small>₽/год</small></div>
         <div class="kpi__sub">${fr(Math.round(oc/12))} ₽ / месяц</div>
       </div>
@@ -488,13 +488,13 @@
     const d5 = t5.comfort - t5.base, d10 = t10.comfort - t10.base;
     document.getElementById('tco-block').innerHTML = `
       <div class="tco-item">
-        <div class="tco-item__label">TCO · 5 лет (CAPEX + ОПЕКС×5)</div>
+        <div class="tco-item__label">TCO · 5 лет (CAPEX + OPEX×5)</div>
         <div class="tco-item__c">${fr(t5.comfort)} ₽</div>
         <div class="tco-item__b">База: ${fr(t5.base)} ₽</div>
         <div class="tco-item__d ${d5>0?'tco-item__d--neg':'tco-item__d--pos'}">Δ ${d5>0?'+':''}${fr(d5)} ₽</div>
       </div>
       <div class="tco-item">
-        <div class="tco-item__label">TCO · 10 лет (CAPEX + ОПЕКС×10)</div>
+        <div class="tco-item__label">TCO · 10 лет (CAPEX + OPEX×10)</div>
         <div class="tco-item__c">${fr(t10.comfort)} ₽</div>
         <div class="tco-item__b">База: ${fr(t10.base)} ₽</div>
         <div class="tco-item__d ${d10>0?'tco-item__d--neg':'tco-item__d--pos'}">Δ ${d10>0?'+':''}${fr(d10)} ₽</div>
@@ -517,7 +517,7 @@
           на <strong>${fr(-dca)} ₽ дороже</strong> варианта Комфорт (${fr(cc.total)} ₽).<br><br>
           Это происходит потому, что в Базе используется более дорогой набор кондиционеров
           без механической приточки.<br><br>
-          <strong>ОПЕКС</strong> Комфорта выше: +${fr(dOpex)} ₽/год (+${fr(moCost)} ₽/мес)
+          <strong>OPEX</strong> Комфорта выше: +${fr(dOpex)} ₽/год (+${fr(moCost)} ₽/мес)
           — это стоимость работы калорифера и приточного вентилятора.
         </div>
         <div class="insight-card__highlight">
@@ -531,7 +531,7 @@
         <div class="insight-card__title">Комфорт дороже — это осознанная доплата за микроклимат</div>
         <div class="insight-card__body">
           <strong>Δ CAPEX:</strong> +${fr(dca)} ₽ (Комфорт дороже в монтаже).<br>
-          <strong>Δ ОПЕКС:</strong> +${fr(dOpex)} ₽/год (+${fr(moCost)} ₽/мес).<br><br>
+          <strong>Δ OPEX:</strong> +${fr(dOpex)} ₽/год (+${fr(moCost)} ₽/мес).<br><br>
           Это менее <strong>1% от стоимости квартиры</strong> в CAPEX.
           Ежемесячная разница сопоставима со стоимостью подписки.<br><br>
           В ответ: детская без превышения 1000 ppm CO₂ vs <strong>5 542 ppm</strong> в Базе.
