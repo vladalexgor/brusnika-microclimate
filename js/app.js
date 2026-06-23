@@ -14,7 +14,7 @@
     rad:     '#6EE7B7',
     vent:    '#A78BFA',
     capex_v: '#A78BFA',
-    capex_c: '#5B9BD4',
+    capex_h: '#5B9BD4',
     capex_k: '#6EE7B7',
     txt:     'rgba(238,240,245,0.52)',
     grid:    'rgba(238,240,245,0.045)',
@@ -74,13 +74,11 @@
     const cc  = d.capex.comfort.total;
     const cb  = d.capex.base.total;
     const dco = oc - ob;         // ежегодная разница OPEX
-    const dca = cc - cb;         // разница CAPEX (отрицательная у 1С = Комфорт дешевле!)
+    const dca = cc - cb;         // разница CAPEX (положительная = Комфорт дороже)
     const moCost = Math.round(dco / 12); // стоимость комфорта в месяц
     const t5c = d.tco.y5.comfort;
     const t5b = d.tco.y5.base;
     const dt5 = t5c - t5b;
-
-    const isCapexParadox = dca < 0; // Комфорт дешевле по CAPEX
 
     document.getElementById('kpi-root').innerHTML = `
       <!-- CAPEX Комфорт -->
@@ -88,18 +86,14 @@
         <div class="kpi__label">CAPEX · Комфорт</div>
         <div class="kpi__value">${fr(cc)}<small>₽</small></div>
         <div class="kpi__sub">Оборудование · разово</div>
-        ${isCapexParadox
-          ? `<div class="kpi__delta kpi__delta--pos">✓ дешевле Базы на ${fr(-dca)} ₽</div>`
-          : `<div class="kpi__delta kpi__delta--muted">CAPEX Комфорт</div>`}
+        <div class="kpi__delta kpi__delta--neg">↑ дороже Базы на ${fr(dca)} ₽</div>
       </div>
       <!-- CAPEX База -->
       <div class="kpi kpi--base">
         <div class="kpi__label">CAPEX · База</div>
         <div class="kpi__value">${fr(cb)}<small>₽</small></div>
         <div class="kpi__sub">Оборудование · разово</div>
-        ${isCapexParadox
-          ? `<div class="kpi__delta kpi__delta--neg">↑ дороже Комфорта на ${fr(-dca)} ₽</div>`
-          : `<div class="kpi__delta kpi__delta--pos">экономия ${fr(-dca)} ₽</div>`}
+        <div class="kpi__delta kpi__delta--pos">✓ экономия ${fr(dca)} ₽</div>
       </div>
       <!-- Стоимость комфорта в месяц -->
       <div class="kpi kpi--cost">
@@ -453,11 +447,11 @@
     const d  = aptData();
     const cc = d.capex.comfort;
     const cb = d.capex.base;
-    const dca = cc.total - cb.total; // negative = Comfort cheaper (1C paradox)
+    const dca = cc.total - cb.total; // positive = Comfort more expensive (expected)
 
     // Legend
     document.getElementById('capex-legend').innerHTML = [
-      [C.capex_v,'Вентиляция'],[C.capex_c,'Охлаждение'],[C.capex_k,'Кондиционирование'],
+      [C.capex_v,'Вентиляция'],[C.capex_h,'Отопление'],[C.capex_k,'Кондиционирование'],
     ].map(([col,lbl])=>`<span class="legend-item">${sw(col)}${lbl}</span>`).join('');
 
     charts['capex'] = new Chart(document.getElementById('chart-capex'),{
@@ -465,8 +459,8 @@
       data:{
         labels:['Комфорт','База'],
         datasets:[
-          {label:'Вентиляция',     data:[cc.vent,cb.vent],backgroundColor:C.capex_v,stack:'a',borderRadius:3,borderWidth:0},
-          {label:'Охлаждение',     data:[cc.cool,cb.cool],backgroundColor:C.capex_c,stack:'a',borderRadius:3,borderWidth:0},
+          {label:'Вентиляция',       data:[cc.vent,cb.vent],backgroundColor:C.capex_v,stack:'a',borderRadius:3,borderWidth:0},
+          {label:'Отопление',        data:[cc.heat,cb.heat],backgroundColor:C.capex_h,stack:'a',borderRadius:3,borderWidth:0},
           {label:'Кондиционирование',data:[cc.kond,cb.kond],backgroundColor:C.capex_k,stack:'a',borderRadius:3,borderWidth:0},
         ],
       },
@@ -507,34 +501,31 @@
     const moCost = Math.round(dOpex / 12);
 
     if (apt === '1c') {
-      // Paradox: Base CAPEX > Comfort CAPEX
-      el.className = 'insight-card insight-card--positive';
+      el.className = 'insight-card';
       el.innerHTML = `
-        <div class="insight-card__tag">Финансовый парадокс · 1С</div>
-        <div class="insight-card__title">Комфорт дешевле при покупке — и лучше по воздуху</div>
+        <div class="insight-card__tag">Стоимость качества · 1С</div>
+        <div class="insight-card__title">Комфорт дороже и при покупке, и в эксплуатации — но даёт воздух</div>
         <div class="insight-card__body">
-          Вариант <strong>База</strong> требует оборудования на <strong>${fr(cb.total)} ₽</strong> —
-          на <strong>${fr(-dca)} ₽ дороже</strong> варианта Комфорт (${fr(cc.total)} ₽).<br><br>
-          Это происходит потому, что в Базе используется более дорогой набор кондиционеров
-          без механической приточки.<br><br>
-          <strong>OPEX</strong> Комфорта выше: +${fr(dOpex)} ₽/год (+${fr(moCost)} ₽/мес)
-          — это стоимость работы калорифера и приточного вентилятора.
+          <strong>Δ CAPEX:</strong> +${fr(dca)} ₽ — бризеры с подогревом вместо клапанов КИВ.<br>
+          <strong>Δ OPEX:</strong> +${fr(dOpex)} ₽/год (+${fr(moCost)} ₽/мес) — работа
+          калорифера и приточного вентилятора.<br><br>
+          В ответ: CO₂ в спальне &lt;800 ppm круглый год vs. превышений нормы 1400 ppm
+          в 8–9% часов при Базовом варианте.
         </div>
         <div class="insight-card__highlight">
-          В первые 15 мес. Комфорт суммарно выгоднее. Затем: +${fr(moCost)} ₽/мес за CO₂ &lt;800 ppm
+          TCO за 5 лет: +${fr(d5)} ₽ · за 10 лет: +${fr(d10)} ₽
         </div>`;
     } else {
-      // Standard: Comfort costs more in both CAPEX and OPEX
       el.className = 'insight-card';
       el.innerHTML = `
         <div class="insight-card__tag">Стоимость качества · 2С</div>
-        <div class="insight-card__title">Комфорт дороже — это осознанная доплата за микроклимат</div>
+        <div class="insight-card__title">Комфорт дороже — осознанная доплата за микроклимат</div>
         <div class="insight-card__body">
-          <strong>Δ CAPEX:</strong> +${fr(dca)} ₽ (Комфорт дороже в монтаже).<br>
+          <strong>Δ CAPEX:</strong> +${fr(dca)} ₽ — ХВВП с канальными фанкойлами вместо КИВ.<br>
           <strong>Δ OPEX:</strong> +${fr(dOpex)} ₽/год (+${fr(moCost)} ₽/мес).<br><br>
           Это менее <strong>1% от стоимости квартиры</strong> в CAPEX.
           Ежемесячная разница сопоставима со стоимостью подписки.<br><br>
-          В ответ: детская без превышения 1000 ppm CO₂ vs <strong>5 542 ppm</strong> в Базе.
+          В ответ: детская без превышения 1000 ppm CO₂ vs &gt;1400 ppm в Базе.
           Разница критическая для здоровья ребёнка.
         </div>
         <div class="insight-card__highlight">

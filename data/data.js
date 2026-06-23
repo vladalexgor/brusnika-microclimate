@@ -414,16 +414,16 @@ const DATA = {
     },
     "capex": {
       "comfort": {
-        "vent": 41242,
-        "cool": 34000,
-        "kond": 61200,
-        "total": 136442
-      },
-      "base": {
-        "vent": 28280,
-        "cool": 63920,
+        "heat": 28280,
+        "vent": 63920,
         "kond": 61200,
         "total": 153400
+      },
+      "base": {
+        "heat": 41242,
+        "vent": 34000,
+        "kond": 61200,
+        "total": 136442
       }
     },
     "totals": {
@@ -432,12 +432,12 @@ const DATA = {
     },
     "tco": {
       "y5": {
-        "comfort": 228337,
-        "base": 179035
+        "comfort": 245295,
+        "base": 162077
       },
       "y10": {
-        "comfort": 320232,
-        "base": 204670
+        "comfort": 337190,
+        "base": 187712
       }
     }
   },
@@ -1008,16 +1008,16 @@ const DATA = {
     },
     "capex": {
       "comfort": {
-        "vent": 59492,
-        "cool": 51000,
-        "kond": 195500,
-        "total": 305992
+        "heat": 28552,
+        "vent": 51000,
+        "kond": 225250,
+        "total": 304802
       },
       "base": {
-        "vent": 28552,
-        "cool": 10200,
-        "kond": 189550,
-        "total": 228302
+        "heat": 59492,
+        "vent": 10200,
+        "kond": 109820,
+        "total": 179512
       }
     },
     "totals": {
@@ -1026,12 +1026,12 @@ const DATA = {
     },
     "tco": {
       "y5": {
-        "comfort": 505927,
-        "base": 284282
+        "comfort": 504737,
+        "base": 235492
       },
       "y10": {
-        "comfort": 705862,
-        "base": 340262
+        "comfort": 704672,
+        "base": 291472
       }
     }
   }
