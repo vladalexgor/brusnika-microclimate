@@ -1,4 +1,4 @@
-// Auto-generated from IES VE simulation data
+// Auto-generated from Data Zoom simulation data
 // Ventilation: converted from l/s to m3/h (x3.6)
 // Tariffs: electricity 5.37/2.70 RUB/kWh (day/night), heat 1.91 RUB/kWh
 // CAPEX: with 0.85 supplier discount
